@@ -1,7 +1,8 @@
-const ship = (length, hits = 0, isSunk) => {
+const ship = (name, length, hits = 0, isSunk) => {
   return {
     length,
     hits,
+    name,
     isSunk() {
       if (this.hits < length) {
         return false;
