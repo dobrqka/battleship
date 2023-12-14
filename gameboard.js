@@ -9,31 +9,63 @@ const gameboard = () => {
           hit: false,
           hasShip: false,
           name: undefined,
+          theShip: undefined,
         };
       }
     }
   })();
+
+  let allShips = [];
 
   const addShip = (ship, x, y, direction = "xAxis") => {
     if (direction == "xAxis") {
       for (let i = 0; i < ship.length; i++) {
         grid[x][y + i].hasShip = true;
         grid[x][y + i].name = ship.name;
+        grid[x][y + i].theShip = ship;
+        allShips[allShips.length] = ship;
       }
     } else if (direction == "yAxis") {
       for (let i = 0; i < ship.length; i++) {
         grid[x + i][y].hasShip = true;
         grid[x + i][y].name = ship.name;
+        grid[x + i][y].theShip = ship;
+        allShips[allShips.length] = ship;
       }
     }
   };
-  return { grid, addShip };
+
+  const receiveAttack = (x, y) => {
+    if (grid[x][y].hit) {
+      return "Already attacked.";
+    } else if (grid[x][y].hasShip) {
+      grid[x][y].theShip.hits += 1;
+      grid[x][y].hit = true;
+    } else {
+      grid[x][y].hit = true;
+    }
+  };
+
+  const gameOver = () => {
+    let isGameOver = false;
+    let i = 0;
+    while (i < allShips.length) {
+      if (allShips[i].hits == allShips[i].length) {
+        allShips.shift();
+      } else {
+        i++;
+      }
+    }
+    if (allShips.length == 0) {
+      isGameOver = true;
+    }
+    return isGameOver;
+  };
+
+  return { grid, addShip, receiveAttack, gameOver };
 };
 
 module.exports = gameboard;
-
-/// should be 10x10; 1 axis is represented by numbers
-//  while the other by letters
 
 // ships and their sizes (in squares) should be:
 //
