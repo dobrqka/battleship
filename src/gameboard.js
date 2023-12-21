@@ -31,8 +31,44 @@ export const gameboard = () => {
       if (ship.length + y - 2 < 10) {
         let slotsAreFree = true;
         for (let i = 0; i < ship.length; i++) {
+          if (x + 1 <= 10 && grid[x + 1][y + i].hasShip) {
+            slotsAreFree = false;
+          }
+          if (x - 1 >= 1 && grid[x - 1][y + i].hasShip) {
+            slotsAreFree = false;
+          }
           if (grid[x][y + i].hasShip) {
             slotsAreFree = false;
+          }
+          if (i == 0) {
+            if (y - 1 >= 1 && grid[x][y - 1].hasShip) {
+              slotsAreFree = false;
+            }
+            if (x + 1 <= 10 && y - 1 >= 1 && grid[x + 1][y - 1].hasShip) {
+              slotsAreFree = false;
+            }
+            if (x - 1 >= 1 && y - 1 >= 1 && grid[x - 1][y - 1].hasShip) {
+              slotsAreFree = false;
+            }
+          }
+          if (i == ship.length - 1) {
+            if (y + ship.length <= 10 && grid[x][y + ship.length].hasShip) {
+              slotsAreFree = false;
+            }
+            if (
+              x + 1 <= 10 &&
+              y + ship.length <= 10 &&
+              grid[x + 1][y + ship.length].hasShip
+            ) {
+              slotsAreFree = false;
+            }
+            if (
+              x - 1 >= 1 &&
+              y + ship.length <= 10 &&
+              grid[x - 1][y + ship.length].hasShip
+            ) {
+              slotsAreFree = false;
+            }
           }
         }
         if (slotsAreFree) {
@@ -50,8 +86,44 @@ export const gameboard = () => {
       if (ship.length + x - 2 < 10) {
         let slotsAreFree = true;
         for (let i = 0; i < ship.length; i++) {
+          if (y + 1 <= 10 && grid[x + i][y + 1].hasShip) {
+            slotsAreFree = false;
+          }
+          if (y - 1 >= 1 && grid[x + i][y - 1].hasShip) {
+            slotsAreFree = false;
+          }
           if (grid[x + i][y].hasShip) {
             slotsAreFree = false;
+          }
+          if (i == 0) {
+            if (x - 1 >= 1 && grid[x - 1][y].hasShip) {
+              slotsAreFree = false;
+            }
+            if (y + 1 <= 10 && x - 1 >= 1 && grid[x - 1][y + 1].hasShip) {
+              slotsAreFree = false;
+            }
+            if (y - 1 >= 1 && x - 1 >= 1 && grid[x - 1][y - 1].hasShip) {
+              slotsAreFree = false;
+            }
+          }
+          if (i == ship.length - 1) {
+            if (x + ship.length <= 10 && grid[x + ship.length][y].hasShip) {
+              slotsAreFree = false;
+            }
+            if (
+              y + 1 <= 10 &&
+              x + ship.length <= 10 &&
+              grid[x + ship.length][y + 1].hasShip
+            ) {
+              slotsAreFree = false;
+            }
+            if (
+              y - 1 >= 1 &&
+              x + ship.length <= 10 &&
+              grid[x + ship.length][y - 1].hasShip
+            ) {
+              slotsAreFree = false;
+            }
           }
         }
         if (slotsAreFree) {
