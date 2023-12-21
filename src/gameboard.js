@@ -29,20 +29,18 @@ export const gameboard = () => {
   const addShip = (ship, x, y, direction = "xAxis") => {
     if (direction == "xAxis") {
       if (ship.length + y - 2 < 10) {
+        let slotsAreFree = true;
         for (let i = 0; i < ship.length; i++) {
-          if (!grid[x][y + i].hasShip) {
+          if (grid[x][y + i].hasShip) {
+            slotsAreFree = false;
+          }
+        }
+        if (slotsAreFree) {
+          for (let i = 0; i < ship.length; i++) {
             grid[x][y + i].hasShip = true;
             grid[x][y + i].name = ship.name;
             grid[x][y + i].theShip = ship;
             allShips[allShips.length] = ship;
-          } else {
-            for (let j = i - 1; j >= 0; j--) {
-              grid[x][y + j].hasShip = false;
-              grid[x][y + j].name = undefined;
-              grid[x][y + j].theShip = undefined;
-              allShips[allShips.length - 1] = undefined;
-            }
-            break;
           }
         }
       } else {
@@ -50,20 +48,18 @@ export const gameboard = () => {
       }
     } else if (direction == "yAxis") {
       if (ship.length + x - 2 < 10) {
+        let slotsAreFree = true;
         for (let i = 0; i < ship.length; i++) {
-          if (!grid[x][y + i].hasShip) {
+          if (grid[x + i][y].hasShip) {
+            slotsAreFree = false;
+          }
+        }
+        if (slotsAreFree) {
+          for (let i = 0; i < ship.length; i++) {
             grid[x + i][y].hasShip = true;
             grid[x + i][y].name = ship.name;
             grid[x + i][y].theShip = ship;
             allShips[allShips.length] = ship;
-          } else {
-            for (let j = i - 1; j >= 0; j--) {
-              grid[x + j][y].hasShip = false;
-              grid[x + j][y].name = undefined;
-              grid[x + j][y].theShip = undefined;
-              allShips[allShips.length - 1] = undefined;
-            }
-            break;
           }
         }
       } else {

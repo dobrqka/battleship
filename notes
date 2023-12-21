@@ -1,5 +1,5 @@
-prevent adding ships over other ships
-
-randomize bot ship positioning
+prevent adding ships next to each other
 
 provide the option to place your own ships
+
+refactor
