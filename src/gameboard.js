@@ -156,7 +156,6 @@ export const gameboard = () => {
     let i = 0;
     while (i < allShips.length) {
       if (allShips[i].hits == allShips[i].length) {
-        // allShips.shift();
         allShips.splice(i, allShips[i].length);
       } else {
         i++;
@@ -171,11 +170,3 @@ export const gameboard = () => {
 };
 
 // module.exports = gameboard;
-
-// ships and their sizes (in squares) should be:
-//
-// Carrier - 5
-// Battleship - 4
-// Destroyer - 3
-// Submarine - 3
-// Patrol boat - 2

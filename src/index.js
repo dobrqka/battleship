@@ -1,5 +1,6 @@
 import "./style.css";
 import { gameLoop } from "./gameLoop.js";
+import { ship } from "./ship";
 
 const theGame = gameLoop();
 const boardOne = theGame.gameboardOne;
@@ -35,19 +36,16 @@ const renderBoards = (() => {
           domBoardTwo.appendChild(square);
           square.setAttribute("data-x", `${boardTwo.grid.indexOf(item)}`);
           square.setAttribute("data-y", `${item.indexOf(subitem)}`);
-          if (subitem.hasShip) {
-            square.classList.add("bot-ship");
-          }
+          // if (subitem.hasShip) {
+          //   square.classList.add("bot-ship");
+          // }
         }
       });
     }
   });
 })();
 
-const playerOneSquares = document.querySelectorAll(".square-one");
-const playerTwoSquares = document.querySelectorAll(".square-two");
-
-const attack = (() => {
+const attack = () => {
   playerTwoSquares.forEach((square) => {
     square.addEventListener("click", () => {
       let x = +square.getAttribute("data-x");
@@ -60,8 +58,7 @@ const attack = (() => {
         square.classList.add("hit");
         console.log(boardTwo.gameOver());
         if (boardTwo.gameOver()) {
-          alert("Game over.");
-          return;
+          alert("You win!");
         }
       } else {
         square.classList.add("miss");
@@ -100,4 +97,83 @@ const attack = (() => {
       }
     });
   });
-})();
+};
+
+const playerOneSquares = document.querySelectorAll(".square-one");
+const playerTwoSquares = document.querySelectorAll(".square-two");
+const axisButton = document.querySelector(".axis");
+axisButton.addEventListener("click", () => {
+  if (axisButton.textContent == "xAxis") {
+    axisButton.textContent = "yAxis";
+  } else if (axisButton.textContent == "yAxis") {
+    axisButton.textContent = "xAxis";
+  }
+});
+
+const addPlayerShips = () => {
+  const placeShip = (name, length, square) => {
+    boardOne.addShip(
+      ship(name, length),
+      +square.getAttribute("data-x"),
+      +square.getAttribute("data-y"),
+      axisButton.textContent
+    );
+    boardOne.grid.forEach((item) => {
+      if (item !== boardOne.grid[0]) {
+        item.forEach((subitem) => {
+          if (subitem !== item[0]) {
+            if (subitem.hasShip) {
+              playerOneSquares.forEach((box) => {
+                if (
+                  box.getAttribute("data-x") == boardOne.grid.indexOf(item) &&
+                  box.getAttribute("data-y") == item.indexOf(subitem)
+                ) {
+                  box.classList.add("ship");
+                }
+              });
+            }
+          }
+        });
+      }
+    });
+  };
+
+  alert("Place your ships on the left board.");
+  const boardTwoDom = document.querySelector(".board-two");
+  boardTwoDom.style.opacity = "0.1";
+  playerOneSquares.forEach((square) => {
+    square.addEventListener("click", () => {
+      if (boardOne.allShips.length == 0) {
+        placeShip("Carrier", 5, square);
+      } else if (boardOne.allShips.length == 5) {
+        placeShip("Battleship", 4, square);
+      } else if (boardOne.allShips.length == 9) {
+        placeShip("Destroyer", 3, square);
+      } else if (boardOne.allShips.length == 12) {
+        placeShip("Submarine", 2, square);
+      } else if (boardOne.allShips.length == 14) {
+        placeShip("Patrol", 1, square);
+        alert("Attack the right board!");
+        attack();
+        boardTwoDom.style.opacity = "1";
+      }
+    });
+  });
+};
+
+addPlayerShips();
+
+// const newGame = (() => {
+//   const newButton = document.querySelector(".new-game");
+//   newButton.addEventListener("click", () => {
+//     boardOne.allShips = [];
+//     boardTwo.allShips = [];
+//     playerOneSquares.forEach((square) => {
+//       square.className = "square-one";
+//     });
+//     playerTwoSquares.forEach((square) => {
+//       square.className = "square-two";
+//     });
+//     addPlayerShips();
+//   });
+// })();
